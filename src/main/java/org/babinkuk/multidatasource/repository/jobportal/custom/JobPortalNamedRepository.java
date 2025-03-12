@@ -1,4 +1,4 @@
-package org.babinkuk.multidatasource.repository;
+package org.babinkuk.multidatasource.repository.jobportal.custom;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ public class JobPortalNamedRepository {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
-	public List<String> getAllSkills(String level) {
+	public List<String> getAllSkillNames(String level) {
 	
 		String str = "SELECT name FROM skills WHERE experience_level=:level";
 		

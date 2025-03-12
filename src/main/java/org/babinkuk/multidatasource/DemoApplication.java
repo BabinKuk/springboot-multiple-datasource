@@ -2,9 +2,9 @@ package org.babinkuk.multidatasource;
 
 import java.util.List;
 
-import org.babinkuk.multidatasource.repository.CourseRepository;
-import org.babinkuk.multidatasource.repository.JobPortalNamedRepository;
-import org.babinkuk.multidatasource.repository.JobPortalRepository;
+import org.babinkuk.multidatasource.service.CourseService;
+import org.babinkuk.multidatasource.service.SkillsService;
+import org.babinkuk.multidatasource.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,28 +18,27 @@ public class DemoApplication {
 	}
 
 	@Bean
-	public CommandLineRunner commandLineRunner(CourseRepository courseRepository, JobPortalRepository jobPortalRepository, JobPortalNamedRepository jobPortalNamedRepository) {
+	public CommandLineRunner commandLineRunner(CourseService courseService, UserService userService, SkillsService skillsService) {
 		return runner -> {
-			findData(courseRepository, jobPortalRepository, jobPortalNamedRepository);
+			findData(courseService, userService, skillsService);
 		};
 	}
 
-	private void findData(CourseRepository courseRepository, JobPortalRepository jobPortalRepository, JobPortalNamedRepository jobPortalNamedRepository) {
-		// TODO Auto-generated method stub
-		List<String> courses = findCourseDetails(courseRepository);
-		List<String> users = findUsersDetails(jobPortalRepository);
-		List<String> skills = findSkillsDetails(jobPortalNamedRepository);
+	private void findData(CourseService courseService, UserService userService, SkillsService skillsService) {
+		findCourseDetails(courseService);
+		findUsersDetails(userService);
+		findSkillsDetails(skillsService);
 	}
 
-	private List<String> findCourseDetails(CourseRepository courseRepository) {
-		return courseRepository.getAllCourses();
+	private List<String> findCourseDetails(CourseService courseService) {
+		return courseService.getAllCourseTitles();
 	}
 	
-	private List<String> findUsersDetails(JobPortalRepository jobPortalRepository) {
-		return jobPortalRepository.getAllUsers();
+	private List<String> findUsersDetails(UserService userService) {
+		return userService.getAllUserEmails();
 	}
 	
-	private List<String> findSkillsDetails(JobPortalNamedRepository jobPortalNamedRepository) {
-		return jobPortalNamedRepository.getAllSkills("Advance");
+	private List<String> findSkillsDetails(SkillsService skillsService) {
+		return skillsService.getSkillNamesByLevel("Advance");
 	}
 }

@@ -1,4 +1,4 @@
-package org.babinkuk.multidatasource.repository;
+package org.babinkuk.multidatasource.repository.coursetracker.custom;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,17 +11,17 @@ import static org.babinkuk.multidatasource.configuration.Qualifiers.Datasource.C
 import java.util.List;
 
 @Repository
-public class CourseRepository {
+public class CourseTrackerRepository {
 	
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	
 	private final JdbcTemplate jdbcTemplate;
 	
-	public CourseRepository(@Qualifier(COURSE_TRACKER_DS_JDBC_TEMPLATE) JdbcTemplate jdbcTemplate) {
+	public CourseTrackerRepository(@Qualifier(COURSE_TRACKER_DS_JDBC_TEMPLATE) JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
-	public List<String> getAllCourses() {
+	public List<String> getAllCourseTitles() {
 	
 		String str = "SELECT title FROM course";
 		

@@ -1,4 +1,4 @@
-package org.babinkuk.multidatasource.repository;
+package org.babinkuk.multidatasource.repository.jobportal.custom;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class JobPortalRepository {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
-	public List<String> getAllUsers() {
+	public List<String> getAllUserEmails() {
 	
 		String str = "SELECT email FROM users";
 		
