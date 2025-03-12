@@ -28,9 +28,9 @@ import static org.babinkuk.multidatasource.configuration.Qualifiers.Datasource.C
  */
 @Configuration
 @EnableJpaRepositories(
-        entityManagerFactoryRef = Qualifiers.EntityManagerFactory.COURSE_TRACKER,
-        transactionManagerRef = Qualifiers.TransactionManagerFactory.COURSE_TRACKER,
-        basePackages = {Qualifiers.Datasource.COURSE_TRACKER_REPOSITORY_PACKAGE})
+        entityManagerFactoryRef = Qualifiers.EntityManagerFactory.COURSE_TRACKER, // entityManagerFactoryRef bean name
+        transactionManagerRef = Qualifiers.TransactionManagerFactory.COURSE_TRACKER, // transactionManagerRef bean name
+        basePackages = {Qualifiers.Datasource.COURSE_TRACKER_REPOSITORY_PACKAGE}) // jpa repository package
 public class CourseTrackerDataSourceConfiguration extends BasicDataSourceConfiguration {
 
 	/**
@@ -53,7 +53,7 @@ public class CourseTrackerDataSourceConfiguration extends BasicDataSourceConfigu
 	}
 	
 	/**
-	 * Bean configuring one instance of JdbcTemplate for coursetracker DataSource
+	 * Bean configuring instance of JdbcTemplate for coursetracker DataSource
 	 */
 	@Bean(name = COURSE_TRACKER_DS_JDBC_TEMPLATE)
 	@Primary
@@ -70,6 +70,9 @@ public class CourseTrackerDataSourceConfiguration extends BasicDataSourceConfigu
 		return new NamedParameterJdbcTemplate(ds);
 	}
 	
+	/**
+	 * Bean configuring one instance of LocalContainerEntityManagerFactoryBean for coursetracker DataSource
+	 */
 	@Bean(name = Qualifiers.EntityManagerFactory.COURSE_TRACKER)
 	@Primary
 	public LocalContainerEntityManagerFactoryBean coursetrackerEntityManagerFactory(
@@ -77,13 +80,17 @@ public class CourseTrackerDataSourceConfiguration extends BasicDataSourceConfigu
 			@Qualifier(Qualifiers.Datasource.COURSE_TRACKER) DataSource dataSource) {
 		return builder
 				.dataSource(dataSource)
-				.packages(Qualifiers.Datasource.COURSE_TRACKER_ENTITY_PACKAGE)
+				.packages(Qualifiers.Datasource.COURSE_TRACKER_ENTITY_PACKAGE) // entity package
 				.persistenceUnit(Qualifiers.Datasource.COURSE_TRACKER_PERSISTENCE_NAME)
 				.build();
 	}
 
+	/**
+	 * Bean configuring one instance of TransactionManager for coursetracker DataSource
+	 */
 	@Bean(name = Qualifiers.TransactionManagerFactory.COURSE_TRACKER)
-	public PlatformTransactionManager coursetrackerTransactionManagerFactory(@Qualifier(Qualifiers.EntityManagerFactory.COURSE_TRACKER) EntityManagerFactory entityManagerFactory) {
+	public PlatformTransactionManager coursetrackerTransactionManagerFactory(
+			@Qualifier(Qualifiers.EntityManagerFactory.COURSE_TRACKER) EntityManagerFactory entityManagerFactory) {
 		return new JpaTransactionManager(entityManagerFactory);
 	}
 }

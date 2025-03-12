@@ -27,9 +27,9 @@ import static org.babinkuk.multidatasource.configuration.Qualifiers.Datasource.J
  */
 @Configuration
 @EnableJpaRepositories(
-        entityManagerFactoryRef = Qualifiers.EntityManagerFactory.JOB_PORTAL,
-        transactionManagerRef = Qualifiers.TransactionManagerFactory.JOB_PORTAL,
-        basePackages = {Qualifiers.Datasource.JOB_PORTAL_REPOSITORY_PACKAGE})
+        entityManagerFactoryRef = Qualifiers.EntityManagerFactory.JOB_PORTAL, // entityManagerFactoryRef bean name
+        transactionManagerRef = Qualifiers.TransactionManagerFactory.JOB_PORTAL, // transactionManagerRef bean name
+        basePackages = {Qualifiers.Datasource.JOB_PORTAL_REPOSITORY_PACKAGE}) // jpa repository package
 public class JobPortalDataSourceConfiguration extends BasicDataSourceConfiguration {
 	
 	/**
@@ -66,19 +66,26 @@ public class JobPortalDataSourceConfiguration extends BasicDataSourceConfigurati
 		return new NamedParameterJdbcTemplate(ds);
 	}
 	
+	/**
+	 * Bean configuring one instance of LocalContainerEntityManagerFactoryBean for jobPortal DataSource
+	 */
 	@Bean(name = Qualifiers.EntityManagerFactory.JOB_PORTAL)
 	public LocalContainerEntityManagerFactoryBean jobportalentityManagerFactory(
 			EntityManagerFactoryBuilder builder,
 			@Qualifier(Qualifiers.Datasource.JOB_PORTAL) DataSource dataSource) {
 		return builder
 				.dataSource(dataSource)
-				.packages(Qualifiers.Datasource.JOB_PORTAL_ENTITY_PACKAGE)
+				.packages(Qualifiers.Datasource.JOB_PORTAL_ENTITY_PACKAGE) // entity package
 				.persistenceUnit(Qualifiers.Datasource.JOB_PORTAL_PERSISTENCE_NAME)
 				.build();
 	}
 
+	/**
+	 * Bean configuring one instance of TransactionManager for jobPortal DataSource
+	 */
 	@Bean(name = Qualifiers.TransactionManagerFactory.JOB_PORTAL)
-	public PlatformTransactionManager jobportalTransactionManagerFactory(@Qualifier(Qualifiers.EntityManagerFactory.JOB_PORTAL) EntityManagerFactory entityManagerFactory) {
+	public PlatformTransactionManager jobportalTransactionManagerFactory(
+			@Qualifier(Qualifiers.EntityManagerFactory.JOB_PORTAL) EntityManagerFactory entityManagerFactory) {
 		return new JpaTransactionManager(entityManagerFactory);
 	}
 }
